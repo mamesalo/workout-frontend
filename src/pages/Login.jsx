@@ -14,7 +14,7 @@ const Login = () => {
   const handleLogin = () => {
     setLoading(true);
     axios
-      .post("https://backend-workout-6pmr.onrender.com/user/login", {
+      .post(`${import.meta.env.VITE_SERVER_URL}/user/login`, {
         email,
         password,
       })
@@ -63,54 +63,119 @@ const Login = () => {
   }
 
   return (
-    <div className="">
-      <div className="d-flex justify-content-between bg-white p-4">
-        <div>
-          <h1 className="fw-bolder">MY WORKOUT GYM</h1>
-        </div>
+    <div
+      className="min-vh-100 d-flex flex-column bg-light"
+      style={{
+        background: "linear-gradient(135deg, #f1f8e9, #e3f2fd)",
+      }}
+    >
+      {/* Navbar */}
+      <div className="d-flex justify-content-between align-items-center bg-white shadow-sm py-3 px-4">
+        <h1 className="fw-bold text-primary">MY WORKOUT GYM</h1>
 
         <div className="d-flex gap-4 ">
-          <Link to="/" className="text-decoration-none text-black fs-5">
+          <Link
+            to="/"
+            className="active c-btn text-decoration-none text-white fs-5"
+          >
             Login
           </Link>
-
-          <Link to="/signup" className="text-decoration-none text-black fs-5">
+          <Link
+            to="/signup"
+            className="text-decoration-none c-btn text-secondary fs-5"
+          >
             Sign Up
           </Link>
         </div>
       </div>
 
-      <div className="bg-white  mt-5 mx-auto w-50 p-5 rounded-2">
-        <h1 className="mb-3 fw-bolder fs-3">Login</h1>
-
-        <div>
-          <label className="mb-2 fs-5">Email address:</label>
-
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="form-control mb-3"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 fs-5">Password:</label>
-
-          <input
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="form-control mb-4"
-          />
-        </div>
-        <button
-          className="btn btn-primary"
-          onClick={handleLogin}
-          disabled={loading}
+      {/* Main Section */}
+      <div
+        className="d-flex justify-content-center align-items-center flex-grow-1"
+        style={{
+          background: "linear-gradient(135deg, #e0f7fa, #f1f8e9)",
+        }}
+      >
+        <div
+          className="bg-white shadow rounded-4 p-5"
+          style={{
+            width: "400px",
+          }}
         >
-          {loading ? "Signing up..." : "Login"}
-        </button>
+          <h1 className="mb-4 fw-bold text-center text-primary">Login</h1>
+
+          {/* Email Input */}
+          <div className="mb-3">
+            <label
+              htmlFor="email"
+              className="form-label fs-6 fw-semibold text-muted"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control rounded-pill px-3 py-2"
+              placeholder="Enter your email"
+              style={{ borderColor: "#ced4da" }}
+            />
+          </div>
+
+          {/* Password Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="form-label fs-6 fw-semibold text-muted"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-control rounded-pill px-3 py-2"
+              placeholder="Enter your password"
+              style={{ borderColor: "#ced4da" }}
+            />
+          </div>
+
+          {/* Login Button */}
+          <button
+            className="btn btn-primary rounded-pill w-100 py-2 fw-bold"
+            onClick={handleLogin}
+            disabled={loading}
+            style={{
+              transition: "0.3s ease",
+              backgroundColor: "#007bff",
+              border: "none",
+            }}
+          >
+            {loading ? (
+              <div
+                className="spinner-border spinner-border-sm text-light"
+                role="status"
+              ></div>
+            ) : (
+              "Login"
+            )}
+          </button>
+
+          {/* Footer */}
+          <div className="text-center mt-4">
+            <small className="text-muted">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-primary text-decoration-none fw-semibold"
+              >
+                Sign up
+              </Link>
+            </small>
+          </div>
+        </div>
       </div>
     </div>
   );

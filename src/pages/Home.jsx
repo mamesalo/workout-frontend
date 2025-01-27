@@ -31,7 +31,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("https://backend-workout-6pmr.onrender.com/activities", {
+      .get(`${import.meta.env.VITE_SERVER_URL}/activities`, {
         headers: {
           Authorization: `Bearer ${token}`, // Send the token with the request
         },
@@ -63,7 +63,7 @@ const Home = () => {
 
     try {
       const response = await axios.post(
-        "https://backend-workout-6pmr.onrender.com/activities",
+        `${import.meta.env.VITE_SERVER_URL}/activities`,
         data,
         {
           headers: {
@@ -95,19 +95,19 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <div className="d-flex justify-content-between bg-white p-4">
-        <div>
-          <h1 className="fw-bolder">MY WORKOUT GYM</h1>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <span className="text-decoration-none text-black fs-5">
-            {usernameLocal}
-          </span>
-
+    <div
+      className="min-vh-100 d-flex flex-column"
+      style={{
+        background: "linear-gradient(135deg, #f1f8e9, #e3f2fd)",
+      }}
+    >
+      {/* Navbar */}
+      <div className="d-flex justify-content-between align-items-center bg-white shadow-sm p-3 px-5">
+        <h1 className="fw-bold text-primary">MY WORKOUT GYM</h1>
+        <div className="d-flex align-items-center gap-3">
+          <span className="text-secondary fs-5">{usernameLocal}</span>
           <button
-            className="btn btn-outline-primary fs-5 mx-2"
+            className="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold"
             onClick={handleLogOut}
           >
             Log Out
@@ -115,79 +115,107 @@ const Home = () => {
         </div>
       </div>
 
-      <div className=" d-flex justify-content-between p-4">
-        <div className="w-50 ">
-          {activities.map((activity) => (
-            <div
-              key={activity._id}
-              className="mb-4 p-3  shadow-lg bg-white d-flex justify-content-between"
-            >
-              <div className="d-flex flex-column">
-                <h4 className="text-primary fw-bolder mb-4">
-                  {activity.title}
-                </h4>
-
-                <div className="d-flex justify-content-start ">
-                  <p className=" fs-5 fw-bolder">Load(kg):</p>
-                  <p className="fs-5">{activity.load}</p>
+      {/* Main Content */}
+      <div className="container my-4 d-flex flex-wrap justify-content-between gap-4">
+        {/* Activities List */}
+        <div className="flex-grow-1">
+          <h2 className="text-primary fw-bold mb-4">Workouts</h2>
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <div
+                key={activity._id}
+                className="mb-4 p-4 bg-white shadow-sm rounded-4 d-flex justify-content-between align-items-start"
+              >
+                <div>
+                  <h4 className="text-primary fw-bold mb-3">
+                    {activity.title}
+                  </h4>
+                  <div className="mb-2">
+                    <span className="fw-bold text-secondary">Load (kg): </span>
+                    <span>{activity.load}</span>
+                  </div>
+                  <div className="mb-2">
+                    <span className="fw-bold text-secondary">Reps: </span>
+                    <span>{activity.reps}</span>
+                  </div>
+                  <div>
+                    <small className="text-muted">
+                      {formatDistanceToNow(new Date(activity.createdAt), {
+                        addSuffix: true,
+                      })}
+                    </small>
+                  </div>
                 </div>
-
-                <div className="d-flex justify-content-start ">
-                  <p className="fs-5 fw-bolder">Reps: </p>
-                  <p className="fs-5">{activity.reps}</p>
-                </div>
-
-                <div className="d-flex justify-content-start mt-2">
-                  <p className="fs-6 text-muted">
-                    {formatDistanceToNow(new Date(activity.createdAt), {
-                      addSuffix: true,
-                    })}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <Link to={`/activities/delete/${activity._id}`} className="">
-                  <RiDeleteBin5Line className="text-black delete  p-2" />
+                <Link
+                  to={`/activities/delete/${activity._id}`}
+                  className="text-danger fs-4"
+                >
+                  <RiDeleteBin5Line />
                 </Link>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-muted fs-5">
+              No activities found. Add a new workout to get started!
+            </p>
+          )}
         </div>
 
-        <div className="w-25">
-          <h2>Add a New Workout</h2>
-          <div>
-            <label className="mb-2 fs-5">Exercise Title:</label> <br />
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="form-control mb-4"
-            />
-          </div>
-          <div className="">
-            <label className="mb-2 fs-5">Load (in Kg):</label> <br />
-            <input
-              type="text"
-              value={load}
-              onChange={(e) => setLoad(e.target.value)}
-              className="form-control mb-4"
-            />
-          </div>
-          <div className="">
-            <label className="mb-2 fs-5">Reps:</label> <br />
-            <input
-              type="text"
-              value={reps}
-              onChange={(e) => setReps(e.target.value)}
-              className="form-control mb-4"
-            />
-          </div>
-
-          <button className="btn btn-primary" onClick={handleSaveActivitie}>
-            Add Workout
-          </button>
+        {/* Add New Workout */}
+        <div
+          className="bg-white shadow-sm rounded-4 p-4"
+          style={{
+            width: "350px",
+          }}
+        >
+          <h2 className="text-primary fw-bold mb-4">Add a New Workout</h2>
+          <form>
+            <div className="mb-3">
+              <label className="form-label text-secondary fw-bold">
+                Exercise Title:
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="form-control rounded-pill px-3 py-2"
+                placeholder="Enter exercise title"
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label text-secondary fw-bold">
+                Load (in Kg):
+              </label>
+              <input
+                type="text"
+                value={load}
+                onChange={(e) => setLoad(e.target.value)}
+                className="form-control rounded-pill px-3 py-2"
+                placeholder="Enter load in kg"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="form-label text-secondary fw-bold">Reps:</label>
+              <input
+                type="text"
+                value={reps}
+                onChange={(e) => setReps(e.target.value)}
+                className="form-control rounded-pill px-3 py-2"
+                placeholder="Enter number of reps"
+              />
+            </div>
+            <button
+              className="btn btn-primary rounded-pill w-100 py-2 fw-bold"
+              onClick={handleSaveActivitie}
+              style={{
+                transition: "0.3s ease",
+                backgroundColor: "#007bff",
+                border: "none",
+              }}
+            >
+              Add Workout
+            </button>
+          </form>
         </div>
       </div>
     </div>
