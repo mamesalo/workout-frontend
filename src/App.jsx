@@ -5,16 +5,25 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup";
 import DeleteActivities from "./pages/DeleteActivities.jsx";
 import "./App.css";
+import PrivateRoute from "./util/PrivateRoute.jsx";
+import PublicRoute from "./util/PublicRoute.jsx";
 
 function App() {
   return (
     <SnackbarProvider maxSnack={3}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/activities/delete/:id" element={<DeleteActivities />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<Login />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/activities/delete/:id"
+              element={<DeleteActivities />}
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </SnackbarProvider>

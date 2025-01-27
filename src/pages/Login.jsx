@@ -49,19 +49,6 @@ const Login = () => {
         }
       });
   };
-
-  if (loading) {
-    return (
-      <div
-        className="p-4 d-flex align-items-center justify-content-center container"
-        style={{ height: "100vh", flexDirection: "column" }}
-      >
-        <div className="loading-spinner"></div> {/* Spinner */}
-        <div className="mt-3">Loading...</div> {/* Text below the spinner */}
-      </div>
-    );
-  }
-
   return (
     <div
       className="min-vh-100 d-flex flex-column bg-light"
